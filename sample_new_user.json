@@ -1,0 +1,23 @@
+{"name":"Radhir",
+"gender":"Male",
+"budget":0,
+"number_of_roommates":0,
+"style":"Modern",
+"location":"Siebel",
+"type_of_time":"D",
+"length_of_stay":90,
+"preferences":"crap",
+"company":"blah"
+}
+
+
+
+{
+    "id": 1,
+    "location": "siebel",
+    "schools": "nope",
+    "garden_backyard": "no",
+    "pool": "no",
+    "gym": "no",
+    "shopping_mall": "yes"
+}
