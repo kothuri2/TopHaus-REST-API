@@ -6,8 +6,13 @@ class User (models.Model):
         ('M', 'Month'),
         ('Y', 'Year'),
     )
+	gender_type = (
+    	('Male', 'Male'),
+    	('Female', 'Female'),
+    	('Other', 'Other'),
+    )
 	name = models.CharField(max_length = 40)
-	gender = models.CharField(max_length = 20)
+	gender = models.CharField(max_length = 10, choices = gender_type)
 	budget = models.IntegerField(default = 0)
 	number_of_roommates = models.IntegerField(default=0)
 	style = models.CharField(max_length = 200)

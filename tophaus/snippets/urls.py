@@ -5,11 +5,15 @@ from snippets import views
 
 
 urlpatterns = [
+    
+    
+    url(r'^$', views.api_root),
     url(r'^users/$', views.UserList.as_view()),
     url(r'^users/getUser/(?P<pk>[0-9]+)/$', views.UserDetailRetrieve.as_view()),
     url(r'^users/newUser/$', views.UserDetailCreate.as_view()),
     url(r'^users/deleteUser/(?P<pk>[0-9]+)/$', views.UserDetailDestroy.as_view()),
     url(r'^users/updateUser/(?P<pk>[0-9]+)/$', views.UserDetailUpdate.as_view()),
+    url(r'^users/getCompatibleRoommates/(?P<pk>[0-9]+)/$', views.get_compatible_roommates),
 
     url(r'^houses/$', views.HouseList.as_view()),
     url(r'^houses/getHouse/(?P<pk>[0-9]+)/$', views.HouseDetailRetrieve.as_view()),
@@ -22,6 +26,7 @@ urlpatterns = [
     url(r'^amenities/newAmenity/$', views.AmenityDetailCreate.as_view()),
     url(r'^amenities/deleteAmenity/(?P<pk>[0-9]+)/$', views.AmenityDetailDestroy.as_view()),
     url(r'^amenities/updateAmenity/(?P<pk>[0-9]+)/$', views.AmenityDetailUpdate.as_view()),
+    
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

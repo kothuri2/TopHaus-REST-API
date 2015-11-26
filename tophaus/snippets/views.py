@@ -11,6 +11,27 @@ from rest_framework.response import Response
 import django_filters
 from rest_framework import filters
 
+@api_view(('GET',))
+def api_root(request, format=None):
+    return Response({
+        'GET ALL users': 'http://tophaus.herokuapp.com/users/',
+        'POST a new user': 'http://tophaus.herokuapp.com/users/newUser/',
+        'GET a User': 'http://tophaus.herokuapp.com/users/getUser/[id]',
+        'PUT a User': 'http://tophaus.herokuapp.com/users/updateUser/[id]',
+        'REMOVE a User': 'http://tophaus.herokuapp.com/users/deleteUser/[id]',
+        'GET Compatible Roommates': 'http://tophaus.herokuapp.com/users/getCompatibleRoommates/[id]',
+        'GET ALL houses': 'http://tophaus.herokuapp.com/houses/',
+        'POST a new house': 'http://tophaus.herokuapp.com/houses/newHouse/',
+        'GET a house': 'http://tophaus.herokuapp.com/houses/getHouse/[id]',
+        'PUT a house': 'http://tophaus.herokuapp.com/houses/updateHouse/[id]',
+        'REMOVE a house': 'http://tophaus.herokuapp.com/houses/deleteHouse/[id]',
+        'GET ALL Amenities': 'http://tophaus.herokuapp.com/amenities/',
+        'POST a new amenity': 'http://tophaus.herokuapp.com/amenities/newAmenity/',
+        'GET a amenity': 'http://tophaus.herokuapp.com/amenities/getAmenity/[id]',
+        'PUT a amenity': 'http://tophaus.herokuapp.com/amenities/updateAmenity/[id]',
+        'REMOVE a amenity': 'http://tophaus.herokuapp.com/amenities/deleteAmenity/[id]',
+    })
+
 class JSONResponse(HttpResponse):
     """
     An HttpResponse that renders its content into JSON.
@@ -63,7 +84,7 @@ class UserFilter(django_filters.FilterSet):
         model = User
         fields = ['location', 'gender', 'company', 'number_of_roommates']
 
-#GET LISTd
+#GET LIST
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -90,8 +111,55 @@ class UserDetailUpdate(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-####AMENITIES#####
+@api_view(['GET'])
+def get_compatible_roommates(request, pk):
+    """
+    Retrieve compatible roommates
+    """
+    try:
+        base_user = User.objects.get(pk=pk)
+        best_roommates = find_roommates(base_user)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
+    if request.method == 'GET':
+        serializer = UserSerializer(best_roommates, many=True)
+        return Response(serializer.data)
+
+def find_roommates(base_user):
+    #print(base_user.name)
+    users = User.objects.all()
+    users_len = len(users)
+    sorted_users = []
+    for user in users:
+        count = 0
+        if(base_user.name == user.name or base_user.location != user.location):
+            count += 0
+        else:
+            count += 1
+        if(base_user.gender == user.gender):
+            count += 1
+        if(abs(base_user.budget - user.budget) <= 100):
+            count += 1
+        if(abs(base_user.number_of_roommates - user.number_of_roommates) <= 2):
+            count += 1
+        if(base_user.style == user.style):
+            count += 1
+        if(base_user.company == user.company):
+            count += 1
+        tuple1 = (user, count)
+        #print(user.name)
+        sorted_users.append(tuple1)
+    sorted_users.sort(key=lambda tup: tup[1], reverse=True)
+    #sorted(sorted_users, key=lambda user: user[1])   # sort by age
+    del sorted_users[0]
+    final_users = []
+    for user in sorted_users:
+        final_users.append(user[0])
+    return final_users
+
+
+####AMENITIES#####
 #GET LIST
 class AmenityList(generics.ListAPIView):
     queryset = Amenity.objects.all()

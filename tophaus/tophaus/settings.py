@@ -10,6 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
+import dj_database_url
+DATABASES = {'default': dj_database_url.config()}
+#DATABASES['default'] =  dj_database_url.config(default='postgres://user:pass@host/db')
+#DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
@@ -21,6 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'h_9brjbmb@w000gjgz*ezgmho3ptk%3rq^*o-0wu9g7*t^67=i'
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +42,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.db.backends.postgresql_psycopg2',
     'rest_framework',
     'snippets'
 )
@@ -75,14 +81,16 @@ WSGI_APPLICATION = 'tophaus.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+        'NAME': 'dddhss1mmt4rlc',                     
+        'USER': 'xyaixhsojauxio',
+        'PASSWORD': 'xiVHxL-fM6uvtKCaq4T5Py3DpZ',
+        'HOST': 'ec2-54-83-199-54.compute-1.amazonaws.com', # Or something like this
+        'PORT': '5432',                     
     }
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -101,4 +109,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
