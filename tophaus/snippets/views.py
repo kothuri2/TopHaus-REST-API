@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
+from rest_framework.parsers import JSONParser, FileUploadParser
 from snippets.models import User, House, Amenity
 from snippets.serializers import UserSerializer, HouseSerializer, AmenitySerializer
 from rest_framework.decorators import api_view
@@ -10,6 +10,7 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 import django_filters
 from rest_framework import filters
+from rest_framework.views import APIView
 
 @api_view(('GET',))
 def api_root(request, format=None):
@@ -40,7 +41,6 @@ class JSONResponse(HttpResponse):
         content = JSONRenderer().render(data)
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
-
 
 class HouseFilter(django_filters.FilterSet):
     min_price = django_filters.NumberFilter(name="exact_cost", lookup_type='gte')

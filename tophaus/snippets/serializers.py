@@ -5,7 +5,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id','name', 'gender', 'budget', 'number_of_roommates', 'style', 'location',
-        			'type_of_time', 'length_of_stay', 'preferences', 'company')
+        			'type_of_time', 'length_of_stay', 'preferences', 'company', 'avatar')
+        
 
 class HouseSerializer(serializers.ModelSerializer):
     class Meta:
